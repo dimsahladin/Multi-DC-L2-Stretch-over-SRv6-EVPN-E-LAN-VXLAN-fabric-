@@ -1,0 +1,68 @@
+vEOS6-LEAF-2#show running-config
+! Command: show running-config
+! device: vEOS6-LEAF-2 (vEOS-lab, EOS-4.27.0F)
+!
+! boot system flash:/vEOS-lab.swi
+!
+no aaa root
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model ribd
+!
+hostname vEOS6-LEAF-2
+!
+spanning-tree mode mstp
+!
+vlan 20,101
+!
+interface Ethernet1
+   mtu 9000
+   switchport mode trunk
+!
+interface Ethernet2
+   switchport access vlan 101
+!
+interface Ethernet3
+!
+interface Ethernet4
+!
+interface Ethernet5
+!
+interface Ethernet6
+!
+interface Ethernet7
+!
+interface Ethernet8
+!
+interface Loopback0
+   ip address 2.2.2.2/32
+   ip ospf area 0.0.0.0
+!
+interface Loopback1
+   ip address 172.20.2.1/32
+   ip ospf area 0.0.0.0
+!
+interface Management1
+!
+interface Vlan20
+   mtu 9000
+   ip address 10.20.20.2/24
+   ip ospf network point-to-point
+   ip ospf area 0.0.0.0
+!
+interface Vxlan1
+   vxlan source-interface Loopback1
+   vxlan udp-port 4789
+   vxlan vlan 101 vni 100101
+   vxlan vlan 101 flood vtep 172.20.2.2
+!
+ip routing
+!
+router ospf 1
+   passive-interface Loopback0
+   passive-interface Loopback1
+   max-lsa 12000
+!
+end
+vEOS6-LEAF-2#
