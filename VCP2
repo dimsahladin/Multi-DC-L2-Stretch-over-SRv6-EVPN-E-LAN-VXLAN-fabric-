@@ -1,0 +1,64 @@
+root@VCP2> show configuration | display set | no-more
+set version 24.4R1.9
+set system host-name VCP2
+set system root-authentication encrypted-password "$6$SlmrSHt9$2y4fKN.elXl.y05yupNnTYTfzvyktnEkGer/8JRibHKfFcv8r.N11Kri0ssTRbtLTcVtrOrlc2zysHYAlRle51"
+set system syslog file interactive-commands interactive-commands any
+set system syslog file messages any notice
+set system syslog file messages authorization info
+set system processes dhcp-service traceoptions file dhcp_logfile
+set system processes dhcp-service traceoptions file size 10m
+set system processes dhcp-service traceoptions level all
+set system processes dhcp-service traceoptions flag packet
+set interfaces ge-0/0/0 mtu 9500
+set interfaces ge-0/0/0 unit 0 family inet unnumbered-address lo0.0
+set interfaces ge-0/0/0 unit 0 family iso
+set interfaces ge-0/0/0 unit 0 family inet6 unnumbered-address lo0.0
+set interfaces ge-0/0/1 mtu 9500
+set interfaces ge-0/0/1 unit 0 family inet unnumbered-address lo0.0
+set interfaces ge-0/0/1 unit 0 family iso
+set interfaces ge-0/0/1 unit 0 family inet6 unnumbered-address lo0.0
+set interfaces ge-0/0/2 flexible-vlan-tagging
+set interfaces ge-0/0/2 mtu 9500
+set interfaces ge-0/0/2 encapsulation flexible-ethernet-services
+set interfaces ge-0/0/2 unit 0 encapsulation vlan-bridge
+set interfaces ge-0/0/2 unit 0 vlan-id 10
+set interfaces ge-0/0/2 unit 0 family bridge
+set interfaces ge-0/0/2 unit 1 encapsulation vlan-bridge
+set interfaces ge-0/0/2 unit 1 vlan-id 20
+set interfaces ge-0/0/2 unit 1 family bridge
+set interfaces fxp0 unit 0 family inet dhcp vendor-id Juniper-vmx-VM682E7E02DA
+set interfaces fxp0 unit 0 family inet6 dhcpv6-client client-type stateful
+set interfaces fxp0 unit 0 family inet6 dhcpv6-client client-ia-type ia-na
+set interfaces fxp0 unit 0 family inet6 dhcpv6-client client-identifier duid-type duid-ll
+set interfaces fxp0 unit 0 family inet6 dhcpv6-client vendor-id Juniper:vmx:VM682E7E02DA
+set interfaces lo0 unit 0 family inet address 10.254.1.2/32
+set interfaces lo0 unit 0 family iso address 49.0001.0010.0254.1002.00
+set interfaces lo0 unit 0 family inet6 address fd00:dc1::2/128
+set routing-instances TENANT-1 instance-type mac-vrf
+set routing-instances TENANT-1 protocols evpn encapsulation srv6
+set routing-instances TENANT-1 protocols evpn source-packet-routing srv6 locator LOC2
+set routing-instances TENANT-1 protocols evpn source-packet-routing srv6 locator micro-dt2-sid
+set routing-instances TENANT-1 bridge-domains bd10 vlan-id 10
+set routing-instances TENANT-1 bridge-domains bd10 interface ge-0/0/2.0
+set routing-instances TENANT-1 bridge-domains bd20 vlan-id 20
+set routing-instances TENANT-1 bridge-domains bd20 interface ge-0/0/2.1
+set routing-instances TENANT-1 service-type vlan-aware
+set routing-instances TENANT-1 route-distinguisher 10.254.1.2:1
+set routing-instances TENANT-1 vrf-target target:65100:1
+set routing-options source-packet-routing srv6 locator LOC2 fd00:dc1:2::/48
+set routing-options source-packet-routing srv6 locator LOC2 micro-sid
+set routing-options autonomous-system 65100
+set protocols router-advertisement interface fxp0.0 managed-configuration
+set protocols bgp group EVPN type internal
+set protocols bgp group EVPN local-address fd00:dc1::2
+set protocols bgp group EVPN family evpn signaling advertise-srv6-service
+set protocols bgp group EVPN family evpn signaling accept-srv6-service
+set protocols bgp group EVPN neighbor fd00:dc1::1 peer-as 65100
+set protocols isis interface all point-to-point
+set protocols isis interface lo0.0 passive
+set protocols isis source-packet-routing srv6 locator LOC2
+set protocols isis level 2 wide-metrics-only
+set protocols isis level 1 disable
+set protocols lldp interface all
+
+root@VCP2>
